@@ -1,12 +1,12 @@
 //
-//  PXInfinityLoader.m
+//  AFActivityIndicatorView.m
 //  Animation Test
 //
 //  Created by Ash Furrow on 2012-09-21.
 //  Copyright (c) 2012 Ash Furrow. All rights reserved.
 //
 
-#import <QuartzCore/QuartzCore.h>
+#import <QuartzCore/QuartzCore.h>       //Note: You'll have to link with QuarzCore. Deal with it.
 #import "AFActivityIndicatorView.h"
 
 #define kSmallLineStartRadius   6
@@ -53,9 +53,10 @@ static CGFloat lerp (CGFloat a, CGFloat b, CGFloat amount)
     
     const NSInteger numberOfSegments = 12;
     
+    //Draw each line segment
     for (NSInteger index = 0; index < numberOfSegments; index++)
     {
-        
+        //centre of the circle
         CGPoint origin = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
 
         NSInteger distanceFromHighlightedIndex = index - currentHighlightedIndex;
@@ -87,6 +88,7 @@ static CGFloat lerp (CGFloat a, CGFloat b, CGFloat amount)
             colourWhiteValue = lerp(inactiveAlphaValue, activeAlphaValue, amount);
         }
         
+        //draw the actual segment
         CGContextSaveGState(context);
         {
             [[UIColor colorWithWhite:whiteValue alpha:colourWhiteValue] set];
@@ -94,6 +96,7 @@ static CGFloat lerp (CGFloat a, CGFloat b, CGFloat amount)
             CGContextSetLineCap(context, kCGLineJoinRound);
             CGContextBeginPath(context);
             
+            //Standar equation for calculating points on a cricle
             CGFloat x, y;
             CGFloat radians = M_PI * 2 * ((CGFloat)index / (CGFloat)12);
             
@@ -109,7 +112,7 @@ static CGFloat lerp (CGFloat a, CGFloat b, CGFloat amount)
         CGContextRestoreGState(context);
     }
     
-    
+    //increment our currently highlighted segment
     currentHighlightedIndex+=1;
     
     if (currentHighlightedIndex >= numberOfSegments)
@@ -152,7 +155,9 @@ static CGFloat lerp (CGFloat a, CGFloat b, CGFloat amount)
 {
     _activityIndicatorViewStyle = activityIndicatorViewStyle;
     
-    switch (_activityIndicatorViewStyle) {
+    //These numbers were derived empiracally and could be a little off.
+    switch (_activityIndicatorViewStyle)
+    {
         case AFActivityIndicatorViewStyleLargeWhite:
         case AFActivityIndicatorViewStyleWhite:
             inactiveAlphaValue = 83.0/255.0;
